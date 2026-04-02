@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>여행의 시작 - 딱 좋은 타이밍 ✈️</title>
+    <title>트립줍줍 - 딱 좋은 타이밍 ✈️</title>
+    
+    <!-- SEO 및 Open Graph (카카오톡 공유 등 바이럴 최적화) -->
+    <meta name="description" content="복잡한 비교 없이 가장 좋은 여행 타이밍을 알려드립니다. 트립줍줍에서 항공권, 숙소 최저가를 확인하세요.">
+    <meta property="og:title" content="트립줍줍 - 여행 최저가 타이밍">
+    <meta property="og:description" content="언제가 제일 쌀까요? 트립줍줍에서 딱 좋은 여행 타이밍을 확인하세요!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tripjupjup.example.com">
+    <meta property="og:site_name" content="트립줍줍">
     <!-- 가독성이 높은 Pretendard 폰트 사용 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <!-- 폰트어썸 (아이콘) -->
@@ -21,7 +29,7 @@
 <body>
 
 <header>
-    <div class="logo">🎒 TravelBuddy</div>
+    <div class="logo">🎒 트립줍줍</div>
 </header>
 
 <main>
@@ -43,19 +51,19 @@
                 <!-- ✈️ 항공 탭 -->
                 <div id="flight" class="tab-pane active">
                     <div class="form-row trip-type">
-                        <label><input type="radio" name="trip" checked> 왕복</label>
-                        <label><input type="radio" name="trip"> 편도</label>
-                        <label><input type="radio" name="trip"> 다구간</label>
+                        <label for="trip_rt"><input type="radio" id="trip_rt" name="trip" checked> 왕복</label>
+                        <label for="trip_ow"><input type="radio" id="trip_ow" name="trip"> 편도</label>
+                        <label for="trip_multi"><input type="radio" id="trip_multi" name="trip"> 다구간</label>
                     </div>
                     <div class="form-row multi-input">
                         <div class="input-group">
-                            <label>출발지</label>
-                            <input type="text" value="제주(CJU)" placeholder="어디서 출발하시나요?">
+                            <label for="search_origin">출발지</label>
+                            <input type="text" id="search_origin" value="제주(CJU)" placeholder="어디서 출발하시나요?">
                         </div>
                         <div class="swap-icon"><i class="fa-solid fa-right-left"></i></div>
                         <div class="input-group">
-                            <label>도착지</label>
-                            <input type="text" value="방콕(BKK)" placeholder="어디로 떠나고 싶나요?">
+                            <label for="search_dest">도착지</label>
+                            <input type="text" id="search_dest" value="방콕(BKK)" placeholder="어디로 떠나고 싶나요?">
                         </div>
                     </div>
                     <div class="form-row multi-input">
@@ -154,6 +162,11 @@
         </div>
     </section>
 </main>
+
+<!-- 푸터 (제휴마케팅 공지사항 기재) -->
+<footer class="affiliate-footer">
+    <p>본 웹사이트는 여행 정보 제공 및 가격 비교 서비스입니다. 제휴마케팅 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.</p>
+</footer>
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

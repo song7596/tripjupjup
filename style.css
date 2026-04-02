@@ -374,3 +374,19 @@ main {
     .hero-section h1 { font-size: 32px; }
     .result-header h2 { font-size: 26px; }
 }
+
+/* --- 푸터 (공지사항) --- */
+.affiliate-footer {
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 40px;
+    font-size: 13px;
+    color: #a0a0a0;
+    background: transparent;
+    border-top: 1px solid var(--border);
+}
+
+.affiliate-footer p {
+    margin: 0;
+    line-height: 1.5;
+}
