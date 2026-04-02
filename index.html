@@ -16,6 +16,10 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <!-- 폰트어썸 (아이콘) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Flatpickr (달력 라이브러리) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
     <link rel="stylesheet" href="style.css">
     <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1">
       (function () {
@@ -56,24 +60,58 @@
                         <label for="trip_multi"><input type="radio" id="trip_multi" name="trip"> 다구간</label>
                     </div>
                     <div class="form-row multi-input">
-                        <div class="input-group">
+                        <div class="input-group autocomplete-wrapper">
                             <label for="search_origin">출발지</label>
-                            <input type="text" id="search_origin" value="제주(CJU)" placeholder="어디서 출발하시나요?">
+                            <input type="text" id="search_origin" value="제주(CJU)" placeholder="어디서 출발하시나요?" autocomplete="off">
+                            <ul id="origin_list" class="autocomplete-list hidden"></ul>
                         </div>
-                        <div class="swap-icon"><i class="fa-solid fa-right-left"></i></div>
-                        <div class="input-group">
+                        <div class="swap-icon" id="swap_airports"><i class="fa-solid fa-right-left"></i></div>
+                        <div class="input-group autocomplete-wrapper">
                             <label for="search_dest">도착지</label>
-                            <input type="text" id="search_dest" value="방콕(BKK)" placeholder="어디로 떠나고 싶나요?">
+                            <input type="text" id="search_dest" value="방콕(BKK)" placeholder="어디로 떠나고 싶나요?" autocomplete="off">
+                            <ul id="dest_list" class="autocomplete-list hidden"></ul>
                         </div>
                     </div>
                     <div class="form-row multi-input">
                         <div class="input-group">
-                            <label>가는 날 - 오는 날</label>
-                            <input type="text" value="10.24 (목) - 10.28 (월)" placeholder="날짜 선택">
+                            <label for="flight_date">가는 날 - 오는 날</label>
+                            <input type="text" id="flight_date" placeholder="날짜 선택">
                         </div>
                         <div class="input-group">
-                            <label>인원 및 좌석 / 가격 필터</label>
-                            <input type="text" value="성인 1명, 일반석, 직항 우선">
+                            <label for="pax_adults">성인</label>
+                            <select id="pax_adults">
+                                <option value="1" selected>1명</option>
+                                <option value="2">2명</option>
+                                <option value="3">3명</option>
+                                <option value="4">4명</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="pax_children">아동(2~11세)</label>
+                            <select id="pax_children">
+                                <option value="0" selected>0명</option>
+                                <option value="1">1명</option>
+                                <option value="2">2명</option>
+                                <option value="3">3명</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="pax_infants">유아(~2세)</label>
+                            <select id="pax_infants">
+                                <option value="0" selected>0명</option>
+                                <option value="1">1명</option>
+                                <option value="2">2명</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row multi-input">
+                        <div class="input-group">
+                            <label for="seat_class">좌석 등급</label>
+                            <select id="seat_class">
+                                <option value="0" selected>일반석 (이코노미)</option>
+                                <option value="1">비즈니스</option>
+                                <option value="2">퍼스트</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -143,22 +181,51 @@
     <section id="results" class="results-section hidden">
         <!-- CVR 훅(Hook) 마이크로카피 -->
         <div class="result-header">
-            <h2>🔥 지금 예약하면 평소보다 <span class="highlight">약 3만 원 이득!</span></h2>
-            <p>11월 초에 출발하는 일정이 가장 저렴해요. 예매를 서두르세요!</p>
+            <h2 id="result_title">🔥 지금 예약하면 <span class="highlight" id="result_highlight">약 3만 원 이득!</span></h2>
+            <p id="result_subtitle">11월 초에 출발하는 일정이 가장 저렴해요. 예매를 서두르세요!</p>
         </div>
         
         <div class="chart-card">
-            <h3>가격 추이 (제주 ➔ 방콕)</h3>
+            <h3 id="chart_title">가격 추이 (제주 ➔ 방콕)</h3>
             <div class="chart-wrapper">
                 <canvas id="priceChart"></canvas>
             </div>
         </div>
         
-        <div class="recommendations">
-            <h3>방금 찾은 꿀가성비 항공권 추천 🍯</h3>
-            <div class="card-grid" id="card-grid">
-                <!-- JS에서 더미 데이터 기반 카드가 렌더링 됩니다 -->
+        <!-- 카테고리 1: 선택한 날짜의 예약사이트별 가격 -->
+        <div class="result-category">
+            <div class="category-header">
+                <span class="category-icon">📅</span>
+                <div>
+                    <h3 id="cat1_title">내가 선택한 날짜</h3>
+                    <p class="category-desc" id="cat1_desc">선택하신 날짜 근처의 예약사이트별 가격이에요</p>
+                </div>
             </div>
+            <div class="card-grid" id="grid-selected-date"></div>
+        </div>
+        
+        <!-- 카테고리 2: 가까운 시일 내 최저가 -->
+        <div class="result-category">
+            <div class="category-header">
+                <span class="category-icon">⚡</span>
+                <div>
+                    <h3>가까운 시일 최저가</h3>
+                    <p class="category-desc">곧 다가오는 날짜 중 가장 저렴한 항공편이에요</p>
+                </div>
+            </div>
+            <div class="card-grid" id="grid-nearby-cheapest"></div>
+        </div>
+        
+        <!-- 카테고리 3: 날짜 유연 최저가 -->
+        <div class="result-category">
+            <div class="category-header">
+                <span class="category-icon">🗓️</span>
+                <div>
+                    <h3>날짜 유연 최저가</h3>
+                    <p class="category-desc">날짜에 구애받지 않는다면, 이 가격을 놓치지 마세요!</p>
+                </div>
+            </div>
+            <div class="card-grid" id="grid-flexible"></div>
         </div>
     </section>
 </main>
@@ -168,8 +235,12 @@
     <p>본 웹사이트는 여행 정보 제공 및 가격 비교 서비스입니다. 제휴마케팅 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.</p>
 </footer>
 
+<!-- Flatpickr JS 및 한국어 세팅 -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="script.js"></script>
+<script src="script.js?v=20260402"></script>
 </body>
 </html>
