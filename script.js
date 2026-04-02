@@ -562,14 +562,26 @@ function createFlightCard(item) {
          // 출발일 (YYYY-MM-DD 형식)
          const departDate = item.depart_date || '';
          
-         // 복귀일
+         // 복귀일: 카드 출발일 기준으로 계산 (날짜 역전 방지)
          let returnDate = '';
-         if(datePicker && datePicker.selectedDates.length >= 2) {
-             const rd = datePicker.selectedDates[1];
-             returnDate = `${rd.getFullYear()}-${String(rd.getMonth()+1).padStart(2,'0')}-${String(rd.getDate()).padStart(2,'0')}`;
+         const isRoundTrip = document.getElementById('trip_rt') && document.getElementById('trip_rt').checked;
+         
+         if (isRoundTrip && departDate) {
+             const departObj = new Date(departDate);
+             
+             // 사용자가 선택한 여행 기간(일수) 계산
+             let tripDays = 4; // 기본 4일
+             if (datePicker && datePicker.selectedDates.length >= 2) {
+                 const userDepart = datePicker.selectedDates[0];
+                 const userReturn = datePicker.selectedDates[1];
+                 tripDays = Math.max(1, Math.round((userReturn - userDepart) / (1000 * 60 * 60 * 24)));
+             }
+             
+             // 카드 출발일 + 여행 기간 = 복귀일
+             const returnObj = new Date(departObj.getTime() + tripDays * 24 * 60 * 60 * 1000);
+             returnDate = `${returnObj.getFullYear()}-${String(returnObj.getMonth()+1).padStart(2,'0')}-${String(returnObj.getDate()).padStart(2,'0')}`;
          }
          
-         // 편도 여부
          const isOneWay = returnDate === '';
          
          // 공식 Aviasales 딥링크 (쿼리 파라미터 방식)
