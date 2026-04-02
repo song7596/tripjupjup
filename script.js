@@ -24,6 +24,10 @@ async function proxyFetch(targetUrl) {
     throw new Error('모든 API 호출 방법 실패');
 }
 
+// 사용자가 선택한 출발/도착 IATA 코드 (딥링크용)
+let selectedOriginIATA = 'CJU';
+let selectedDestIATA = 'BKK';
+
 let mockData = {
     priceTrend: [
         { date: '10월 1주', price: 420000 },
@@ -72,9 +76,18 @@ tabBtns.forEach(btn => {
         tabBtns.forEach(b => b.classList.remove('active'));
         tabPanes.forEach(p => p.classList.remove('active'));
 
+        // 항공 탭 외에는 "준비중" 표시
+        const targetId = btn.getAttribute('data-target');
+        if (targetId !== 'flight') {
+            // 항공 탭을 다시 활성화
+            document.querySelector('[data-target="flight"]').classList.add('active');
+            document.getElementById('flight').classList.add('active');
+            alert('🚧 준비중입니다!\n\n해당 서비스는 현재 개발 중이에요.\n빠른 시일 내에 오픈할 예정입니다. 😊');
+            return;
+        }
+        
         // 선택된 탭 활성화
         btn.classList.add('active');
-        const targetId = btn.getAttribute('data-target');
         document.getElementById(targetId).classList.add('active');
         
         // 클릭한 탭이 모바일 화면 중앙에 오도록 스크롤 이동
@@ -140,6 +153,12 @@ async function fetchPlaces(query, listElement, inputElement) {
                     li.addEventListener('click', () => {
                         inputElement.value = `${place.name}(${place.code})`;
                         listElement.classList.add('hidden');
+                        // IATA 코드를 전역 변수에 저장 (딥링크에서 사용)
+                        if (inputElement.id === 'search_origin') {
+                            selectedOriginIATA = place.code;
+                        } else if (inputElement.id === 'search_dest') {
+                            selectedDestIATA = place.code;
+                        }
                     });
                     listElement.appendChild(li);
                 });
@@ -195,6 +214,10 @@ searchBtn.addEventListener('click', () => {
         let originCode = originInput.match(/[A-Z]{3}/i) ? originInput.match(/[A-Z]{3}/i)[0].toUpperCase() : 'CJU';
         let destCode = destInput.match(/[A-Z]{3}/i) ? destInput.match(/[A-Z]{3}/i)[0].toUpperCase() : 'BKK';
 
+        // 전역 변수에 IATA 코드 저장 (딥링크용)
+        selectedOriginIATA = originCode;
+        selectedDestIATA = destCode;
+        
         // 진짜 API 연동
         await fetchFlightData(originCode, destCode);
 
@@ -528,20 +551,34 @@ function createFlightCard(item) {
     
     card.addEventListener('click', () => {
          const marker = '514287';
-         const oIATA = item.origin || 'CJU';
-         const dIATA = item.destination || 'BKK';
+         // 사용자가 입력한 원래 출발지/도착지 IATA 코드 사용
+         const oIATA = selectedOriginIATA || item.origin || 'ICN';
+         const dIATA = selectedDestIATA || item.destination || 'NRT';
          const adults = document.getElementById('pax_adults') ? document.getElementById('pax_adults').value : '1';
          const children = document.getElementById('pax_children') ? document.getElementById('pax_children').value : '0';
          const infants = document.getElementById('pax_infants') ? document.getElementById('pax_infants').value : '0';
          const tripClass = document.getElementById('seat_class') ? document.getElementById('seat_class').value : '0';
-         let departDDMM = item.depart_ddmm || '';
-         let returnDDMM = '';
+         
+         // 출발일 (YYYY-MM-DD 형식)
+         const departDate = item.depart_date || '';
+         
+         // 복귀일
+         let returnDate = '';
          if(datePicker && datePicker.selectedDates.length >= 2) {
              const rd = datePicker.selectedDates[1];
-             returnDDMM = String(rd.getDate()).padStart(2,'0') + String(rd.getMonth()+1).padStart(2,'0');
+             returnDate = `${rd.getFullYear()}-${String(rd.getMonth()+1).padStart(2,'0')}-${String(rd.getDate()).padStart(2,'0')}`;
          }
-         let slug = `${oIATA}${departDDMM}${dIATA}${returnDDMM}${adults}${children}${infants}`;
-         let bookingUrl = `https://www.aviasales.com/search/${slug}?marker=${marker}&trip_class=${tripClass}`;
+         
+         // 편도 여부
+         const isOneWay = returnDate === '';
+         
+         // 공식 Aviasales 딥링크 (쿼리 파라미터 방식)
+         let bookingUrl = `https://search.aviasales.com/flights/?origin_iata=${oIATA}&destination_iata=${dIATA}&depart_date=${departDate}&adults=${adults}&children=${children}&infants=${infants}&trip_class=${tripClass}&one_way=${isOneWay}&marker=${marker}`;
+         if (returnDate) {
+             bookingUrl += `&return_date=${returnDate}`;
+         }
+         
+         console.log('예약 링크:', bookingUrl);
          window.open(bookingUrl, '_blank');
     });
     
